@@ -110,11 +110,14 @@ def generate_images(
     os.makedirs(outdir, exist_ok=True)
 
     # Labels.
+    #print(f"G,c_dim {G.c_dim}")
     label = torch.zeros([1, G.c_dim], device=device)
     if G.c_dim != 0:
         if class_idx is None:
             raise click.ClickException('Must specify class label with --class when using a conditional network')
+        print(f"label {label} and class_idx {class_idx} and label length {len(label)}")
         label[:, class_idx] = 1
+        print(f"label {label} and class_idx {class_idx} and label length {len(label)}")
     else:
         if class_idx is not None:
             print ('warn: --class=lbl ignored when running on an unconditional network')

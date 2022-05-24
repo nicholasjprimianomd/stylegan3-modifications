@@ -1,0 +1,2 @@
+On line 113 of gen_image.py. The class_idx is given to G via a one-hot-encoding vector.
+

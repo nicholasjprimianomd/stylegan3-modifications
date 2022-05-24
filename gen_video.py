@@ -8,6 +8,7 @@
 
 """Generate lerp videos using pretrained network pickle."""
 
+from calendar import c
 import copy
 import os
 import re
@@ -120,10 +121,17 @@ def gen_interp_video(G,
     #My Changes
     #label_0 = torch.zeros([25, G.c_dim], device=device)
     #label_1 = torch.ones([25, G.c_dim], device=device)
-    label_0 = torch.full([25, G.c_dim], fill_value = class_start, device=device)
-    label_1 = torch.full([25, G.c_dim], fill_value = class_end, device=device)
     
-    label = torch.cat([label_0, label_1], dim=0)
+    
+    #label_0 = torch.full([25, G.c_dim], fill_value = class_start, device=device)
+    #label_1 = torch.full([25, G.c_dim], fill_value = class_end, device=device)
+    
+    #label = torch.cat([label_0, label_1], dim=0)
+    
+    
+    label = torch.zeros([num_keyframes, G.c_dim], device=device)
+    class_idx = class_start
+    label[:, class_idx] = 1
 
     zs = torch.from_numpy(np.stack([np.random.RandomState(seed).randn(G.z_dim) for seed in all_seeds])).to(device)
     ws = G.mapping(z=zs, c=label, truncation_psi=psi) # My change to add c=label

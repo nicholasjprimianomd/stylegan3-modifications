@@ -129,9 +129,12 @@ def gen_interp_video(G,
     #label = torch.cat([label_0, label_1], dim=0)
     
     
-    label = torch.zeros([num_keyframes, G.c_dim], device=device)
-    class_idx = class_start
-    label[:, class_idx] = 1
+    label_0 = torch.zeros([int(num_keyframes/2), G.c_dim], device=device)
+    label_0[:, class_start] = 1
+    label_1 = torch.zeros([int(num_keyframes/2), G.c_dim], device=device)
+    label_1[:, class_end] = 1
+    label = torch.cat([label_0, label_1], dim=0)
+
 
     zs = torch.from_numpy(np.stack([np.random.RandomState(seed).randn(G.z_dim) for seed in all_seeds])).to(device)
     ws = G.mapping(z=zs, c=label, truncation_psi=psi) # My change to add c=label

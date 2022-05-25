@@ -8,6 +8,10 @@
 
 """Generate lerp videos using pretrained network pickle."""
 
+<<<<<<< HEAD
+=======
+from calendar import c
+>>>>>>> video_creation_mods
 import copy
 import os
 import re
@@ -82,6 +86,11 @@ def make_transform(translate: Tuple[float,float], angle: float):
 def gen_interp_video(G,
                      mp4: str,
                      seeds: List[int],
+<<<<<<< HEAD
+=======
+                     class_start=Optional[int], 
+                     class_end=Optional[int], 
+>>>>>>> video_creation_mods
                      shuffle_seed: int = None,
                      w_frames: int = 60*4,
                      kind: str = 'cubic',
@@ -115,8 +124,28 @@ def gen_interp_video(G,
         rng = np.random.RandomState(seed=shuffle_seed)
         rng.shuffle(all_seeds)
 
+<<<<<<< HEAD
     zs = torch.from_numpy(np.stack([np.random.RandomState(seed).randn(G.z_dim) for seed in all_seeds])).to(device)
     ws = G.mapping(z=zs, c=None, truncation_psi=psi)
+=======
+    #My Changes
+    #label_0 = torch.zeros([25, G.c_dim], device=device)
+    #label_1 = torch.ones([25, G.c_dim], device=device)
+    #label_0 = torch.full([25, G.c_dim], fill_value = class_start, device=device)
+    #label_1 = torch.full([25, G.c_dim], fill_value = class_end, device=device)
+    #label = torch.cat([label_0, label_1], dim=0)
+    
+    
+    label_0 = torch.zeros([int(num_keyframes/2), G.c_dim], device=device)
+    label_0[:, class_start] = 1
+    label_1 = torch.zeros([int(num_keyframes/2), G.c_dim], device=device)
+    label_1[:, class_end] = 1
+    label = torch.cat([label_0, label_1], dim=0)
+
+
+    zs = torch.from_numpy(np.stack([np.random.RandomState(seed).randn(G.z_dim) for seed in all_seeds])).to(device)
+    ws = G.mapping(z=zs, c=label, truncation_psi=psi) # My change to add c=label
+>>>>>>> video_creation_mods
     _ = G.synthesis(ws[:1]) # warm up
     ws = ws.reshape(grid_h, grid_w, num_keyframes, *ws.shape[1:])
 
@@ -189,6 +218,11 @@ def parse_tuple(s: Union[str, Tuple[int,int]]) -> Tuple[int, int]:
 @click.option('--network', 'network_pkl', help='Network pickle filename', required=True)
 @click.option('--seeds', type=parse_range, help='List of random seeds', required=True)
 @click.option('--shuffle-seed', type=int, help='Random seed to use for shuffling seed order', default=None)
+<<<<<<< HEAD
+=======
+@click.option('--class-start', type=int, help='Class from which interpolation begins', default=None)
+@click.option('--class-end', type=int, help='Class at which interpolation ends', default=None)
+>>>>>>> video_creation_mods
 @click.option('--grid', type=parse_tuple, help='Grid width/height, e.g. \'4x3\' (default: 1x1)', default=(1,1))
 @click.option('--num-keyframes', type=int, help='Number of seeds to interpolate through.  If not specified, determine based on the length of the seeds array given by --seeds.', default=None)
 @click.option('--w-frames', type=int, help='Number of frames to interpolate between latents', default=120)
@@ -198,6 +232,11 @@ def parse_tuple(s: Union[str, Tuple[int,int]]) -> Tuple[int, int]:
 def generate_images(
     network_pkl: str,
     seeds: List[int],
+<<<<<<< HEAD
+=======
+    class_start: Optional[int],
+    class_end: Optional[int],
+>>>>>>> video_creation_mods
     shuffle_seed: Optional[int],
     truncation_psi: float,
     grid: Tuple[int,int],
@@ -234,7 +273,11 @@ def generate_images(
         G = legacy.load_network_pkl(f)['G_ema'].to(device) # type: ignore
 
     gen_interp_video(G=G, mp4=output, bitrate='12M', grid_dims=grid, num_keyframes=num_keyframes, w_frames=w_frames,
+<<<<<<< HEAD
                      seeds=seeds, shuffle_seed=shuffle_seed, psi=truncation_psi, stabilize_video=stabilize_video)
+=======
+                     seeds=seeds, class_start=class_start, class_end=class_end, shuffle_seed=shuffle_seed, psi=truncation_psi, stabilize_video=stabilize_video)
+>>>>>>> video_creation_mods
 
 
 # ----------------------------------------------------------------------------

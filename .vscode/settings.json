@@ -1,0 +1,10 @@
+{
+    "cSpell.words": [
+        "gloo",
+        "nccl",
+        "nshepperd",
+        "outdir",
+        "unsqueeze"
+    ],
+    "git.ignoreLimitWarning": true
+}

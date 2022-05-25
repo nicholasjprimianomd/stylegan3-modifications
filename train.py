@@ -103,10 +103,7 @@ def init_dataset_kwargs(data):
         dataset_obj = dnnlib.util.construct_class_by_name(**dataset_kwargs) # Subclass of training.dataset.Dataset.
         dataset_kwargs.resolution = dataset_obj.resolution # Be explicit about resolution.
         dataset_kwargs.use_labels = dataset_obj.has_labels # Be explicit about labels.
-<<<<<<< HEAD
-=======
         
->>>>>>> video_creation_mods
         dataset_kwargs.max_size = len(dataset_obj) # Be explicit about dataset size.
         return dataset_kwargs, dataset_obj.name
     except IOError as err:
@@ -130,11 +127,7 @@ def parse_comma_separated_list(s):
 @click.command()
 # Required.
 @click.option('--cfg',          help='Base configuration',                                      type=click.Choice(['stylegan3-t', 'stylegan3-r', 'stylegan2']), required=True)
-<<<<<<< HEAD
-@click.option('--data',         help='Training data', metavar='[ZIP|DIR]',                      type=click.Path(exists=True, dir_okay=False), required=True)
-=======
 @click.option('--data',         help='Training data', metavar='[ZIP|DIR]',                      type=click.Path(exists=True, dir_okay=True), required=True) #My change- dir_okay=True
->>>>>>> video_creation_mods
 @click.option('--gpus',         help='Number of GPUs to use', metavar='INT',                    type=click.IntRange(min=1), required=True)
 @click.option('--batch',        help='Total batch size', metavar='INT',                         type=click.IntRange(min=1), required=True)
 # Optional features.

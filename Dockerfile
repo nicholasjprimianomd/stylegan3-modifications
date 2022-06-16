@@ -15,5 +15,5 @@ RUN pip install imageio imageio-ffmpeg==0.4.4 pyspng==0.1.0
 
 WORKDIR /workspace
 
-RUN (printf '#!/bin/bash\nexec \"$@\"\n' >> /entry.sh) && chmod a+x /entry.sh
+RUN (printf '#!/zsh/bash\nexec \"$@\"\n' >> /entry.sh) && chmod a+x /entry.sh
 ENTRYPOINT ["/entry.sh"]
